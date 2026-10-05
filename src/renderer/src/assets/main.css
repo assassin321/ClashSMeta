@@ -1,0 +1,200 @@
+@import 'tailwindcss';
+@import '@heroui/styles';
+@import './app-theme.css';
+@import './app-controls.css';
+@import './app-pages.css';
+@custom-variant dark (&:is(.dark *));
+
+@keyframes proxy-row-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes proxy-tooltip-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(-6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes proxy-tooltip-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@font-face {
+  font-family: 'twemoji';
+  src: url('./twemoji.ttf');
+}
+
+.driver-popover {
+  background-color: var(--surface-secondary) !important;
+  border-radius: 8px !important;
+  color: var(--foreground) !important;
+}
+
+.driver-popover a {
+  color: var(--accent) !important;
+  text-decoration: underline !important;
+}
+
+.driver-popover-close-btn {
+  color: var(--foreground) !important;
+}
+
+.driver-popover-progress-text {
+  color: var(--default-500) !important;
+}
+
+.driver-popover-prev-btn {
+  color: white !important;
+  text-shadow: none !important;
+  border: none !important;
+  padding: 8px !important;
+  border-radius: 5px !important;
+  font-size: 12px !important;
+  background-color: var(--accent) !important;
+}
+
+.driver-popover-next-btn {
+  color: white !important;
+  text-shadow: none !important;
+  border: none !important;
+  padding: 8px !important;
+  border-radius: 5px !important;
+  font-size: 12px !important;
+  background-color: var(--accent) !important;
+}
+
+.driver-popover-arrow-side-bottom {
+  border-bottom-color: var(--surface-secondary) !important;
+}
+
+.driver-popover-arrow-side-top {
+  border-top-color: var(--surface-secondary) !important;
+}
+
+.driver-popover-arrow-side-left {
+  border-left-color: var(--surface-secondary) !important;
+}
+
+.driver-popover-arrow-side-right {
+  border-right-color: var(--surface-secondary) !important;
+}
+
+.app-nodrag {
+  -webkit-app-region: none;
+}
+.app-drag {
+  -webkit-app-region: drag;
+}
+
+.touch-sortable-card {
+  touch-action: pan-y;
+}
+
+.sysproxy-card,
+.tun-card,
+.dns-card,
+.sniff-card,
+.proxy-card,
+.conn-card,
+.profile-card,
+.mihomo-core-card,
+.rule-card,
+.resource-card,
+.override-card,
+.log-card,
+.substore-card {
+  touch-action: pan-y;
+}
+
+.app-drag > .header {
+  width: auto;
+  padding: 0;
+  text-align: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+* {
+  user-select: none;
+}
+
+*:focus {
+  outline: none;
+  outline-width: 0;
+  outline-color: transparent;
+}
+
+.flag-emoji {
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    'Open Sans',
+    'Helvetica Neue',
+    sans-serif,
+    'Apple Color Emoji',
+    'twemoji';
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
+/* Light mode */
+@media (prefers-color-scheme: light) {
+  *::-webkit-scrollbar-thumb {
+    background: #c0c1c58f;
+    border-radius: 5px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: #c0c1c550;
+  }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  *::-webkit-scrollbar-thumb {
+    background: #c0c1c550;
+    border-radius: 5px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: #c0c1c58f;
+  }
+}

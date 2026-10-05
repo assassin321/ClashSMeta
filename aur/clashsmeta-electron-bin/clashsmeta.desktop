@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=ClashSMeta
+Exec=clashsmeta %U
+Terminal=false
+Type=Application
+Icon=clashsmeta
+StartupWMClass=clashsmeta
+MimeType=x-scheme-handler/clash;x-scheme-handler/mihomo;x-scheme-handler/clashsmeta;
+Comment=ClashSMeta
+Categories=Utility;

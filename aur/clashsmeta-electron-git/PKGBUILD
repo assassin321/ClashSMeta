@@ -1,0 +1,58 @@
+pkgname=clashsmeta-electron-git
+_pkgname=${pkgname%-electron-git}
+pkgver=1.26.8.r13.g5536c68
+pkgrel=1
+pkgdesc="Another Mihomo GUI"
+arch=('x86_64' 'aarch64')
+url="https://github.com/assassin321/ClashSMeta"
+license=('GPL-3.0-only')
+provides=("$_pkgname=$pkgver")
+conflicts=("$_pkgname" "$_pkgname-git" "$_pkgname-bin" "$_pkgname-rolling-bin" "$_pkgname-electron" "$_pkgname-electron-bin")
+depends=('electron' 'alsa-lib' 'gtk3' 'libnotify' 'nss' 'libxss' 'libxtst' 'xdg-utils' 'at-spi2-core' 'util-linux-libs' 'libsecret')
+optdepends=('libappindicator-gtk3: Allow clashsmeta to extend a menu via Ayatana indicators in Unity, KDE or Systray (GTK+ 3 library).')
+makedepends=('git' 'nodejs' 'pnpm' 'libxcrypt-compat' 'asar')
+install=$_pkgname.install
+source=(
+    "${_pkgname}.desktop"
+    "${_pkgname}.sh"
+    "${_pkgname}::git+$url.git"
+)
+sha256sums=(
+    "9163b61e496487c06afa67318710c49fb755bded663520edbb89a934a8b25ee0"
+    "ce855656fb0682d403685244c77dd2d90ec6efb207753fb7a6ddc1e9b6aa2c49"
+    "SKIP"
+)
+options=('!debug' '!lto')
+
+pkgver() {
+    cd "${srcdir}/${_pkgname}"
+    ( set -o pipefail
+        git describe --long --tags --abbrev=7 --exclude=rolling --exclude=pre-release 2>/dev/null | sed 's/\([^-]*-g\)/r\1/;s/-/./g;s/^v//' ||
+        printf "r%s.g%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short=7 HEAD)"
+    )
+}
+
+prepare(){
+    cd $srcdir/${_pkgname}
+    sed -i "s/productName: ClashSMeta/productName: clashsmeta/" electron-builder.yml
+    pnpm install
+}
+
+build(){
+    cd $srcdir/${_pkgname}
+    pnpm build:linux deb
+}
+
+package() {
+    asar extract $srcdir/${_pkgname}/dist/linux-unpacked/resources/app.asar ${pkgdir}/opt/clashsmeta
+    cp -r $srcdir/${_pkgname}/extra/sidecar ${pkgdir}/opt/clashsmeta/resources/
+    cp -r $srcdir/${_pkgname}/extra/files ${pkgdir}/opt/clashsmeta/resources/
+    chmod +x ${pkgdir}/opt/clashsmeta/resources/files/clashsmeta-service
+    chmod +sx ${pkgdir}/opt/clashsmeta/resources/sidecar/mihomo
+    chmod +sx ${pkgdir}/opt/clashsmeta/resources/sidecar/mihomo-alpha
+    install -Dm755 "${_pkgname}.sh" "${pkgdir}/usr/bin/${_pkgname}"
+    install -Dm644 "${_pkgname}.desktop" "${pkgdir}/usr/share/applications/${_pkgname}.desktop"
+    install -Dm644 "${pkgdir}/opt/clashsmeta/resources/icon.png" "${pkgdir}/usr/share/icons/hicolor/512x512/apps/${_pkgname}.png"
+
+    chown -R root:root ${pkgdir}
+}
