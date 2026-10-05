@@ -326,7 +326,7 @@ const resolveClashSMetaService = () => {
 const resolveRunner = () =>
   resolveResource({
     file: 'clashsmeta-run.exe',
-    downloadURL: `https://github.com/assassin321/ClashSMeta-run/releases/download/${arch}/sparkle-run.exe`
+    downloadURL: `https://github.com/xishang0128/sparkle-run/releases/download/${arch}/sparkle-run.exe`
   })
 
 const resolveMonitor = async () => {
@@ -336,7 +336,7 @@ const resolveMonitor = async () => {
     fs.mkdirSync(tempDir, { recursive: true })
   }
   await downloadFile(
-    `https://github.com/assassin321/ClashSMeta-run/releases/download/monitor/${arch}.zip`,
+    `https://github.com/xishang0128/sparkle-run/releases/download/monitor/${arch}.zip`,
     tempZip
   )
   const zip = new AdmZip(tempZip)
