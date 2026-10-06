@@ -37,7 +37,7 @@ build(){
 
 package() {
 	cd $srcdir/${_pkgname}/dist
-    bsdtar -xf clashsmeta-linux-$(jq '.version' $srcdir/${_pkgname}/package.json | tr -d 'v"')*.deb
+    bsdtar -xf ClashSMeta-linux-$(jq '.version' $srcdir/${_pkgname}/package.json | tr -d 'v"')*.deb
     bsdtar -xf data.tar.xz -C "${pkgdir}/"
     chmod +x ${pkgdir}/opt/clashsmeta/clashsmeta
     chmod +x ${pkgdir}/opt/clashsmeta/resources/files/sparkle-service
