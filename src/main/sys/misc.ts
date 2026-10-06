@@ -106,7 +106,7 @@ const elevateTaskXml = `<?xml version="1.0" encoding="UTF-16"?>
   </Settings>
   <Actions Context="Author">
     <Exec>
-      <Command>"${path.join(taskDir(), `clashsmeta-run.exe`)}"</Command>
+      <Command>"${path.join(taskDir(), `sparkle-run.exe`)}"</Command>
       <Arguments>"${exePath()}"</Arguments>
     </Exec>
   </Actions>
@@ -114,11 +114,11 @@ const elevateTaskXml = `<?xml version="1.0" encoding="UTF-16"?>
 `
 
 function prepareElevateTaskFile(): string {
-  const taskFilePath = path.join(taskDir(), `clashsmeta-run.xml`)
+  const taskFilePath = path.join(taskDir(), `sparkle-run.xml`)
   writeFileSync(taskFilePath, Buffer.from(`\ufeff${elevateTaskXml}`, 'utf-16le'))
   copyFileSync(
-    path.join(resourcesFilesDir(), 'clashsmeta-run.exe'),
-    path.join(taskDir(), 'clashsmeta-run.exe')
+    path.join(resourcesFilesDir(), 'sparkle-run.exe'),
+    path.join(taskDir(), 'sparkle-run.exe')
   )
   return taskFilePath
 }
@@ -126,7 +126,7 @@ function prepareElevateTaskFile(): string {
 export function createElevateTaskSync(): void {
   const taskFilePath = prepareElevateTaskFile()
   execSync(
-    `%SystemRoot%\\System32\\schtasks.exe /create /tn "clashsmeta-run" /xml "${taskFilePath}" /f`
+    `%SystemRoot%\\System32\\schtasks.exe /create /tn "sparkle-run" /xml "${taskFilePath}" /f`
   )
 }
 
@@ -135,7 +135,7 @@ export async function createElevateTask(): Promise<void> {
   await execWithElevation('schtasks.exe', [
     '/create',
     '/tn',
-    'clashsmeta-run',
+    'sparkle-run',
     '/xml',
     taskFilePath,
     '/f'
@@ -144,7 +144,7 @@ export async function createElevateTask(): Promise<void> {
 
 export async function deleteElevateTask(): Promise<void> {
   try {
-    execSync(`%SystemRoot%\\System32\\schtasks.exe /delete /tn "clashsmeta-run" /f`)
+    execSync(`%SystemRoot%\\System32\\schtasks.exe /delete /tn "sparkle-run" /f`)
   } catch {
     // ignore
   }
@@ -152,7 +152,7 @@ export async function deleteElevateTask(): Promise<void> {
 
 export async function checkElevateTask(): Promise<boolean> {
   try {
-    execSync(`%SystemRoot%\\System32\\schtasks.exe /query /tn "clashsmeta-run"`, { stdio: 'pipe' })
+    execSync(`%SystemRoot%\\System32\\schtasks.exe /query /tn "sparkle-run"`, { stdio: 'pipe' })
     return true
   } catch {
     return false

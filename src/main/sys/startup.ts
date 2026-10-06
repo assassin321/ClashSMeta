@@ -29,10 +29,10 @@ export function ensureWindowsElevatedStartup(
         path.join(taskDir(), 'param.txt'),
         process.argv.slice(1).length > 0 ? process.argv.slice(1).join(' ') : 'empty'
       )
-      if (!existsSync(path.join(taskDir(), 'clashsmeta-run.exe'))) {
-        throw new Error('clashsmeta-run.exe not found')
+      if (!existsSync(path.join(taskDir(), 'sparkle-run.exe'))) {
+        throw new Error('sparkle-run.exe not found')
       }
-      execSync('%SystemRoot%\\System32\\schtasks.exe /run /tn clashsmeta-run')
+      execSync('%SystemRoot%\\System32\\schtasks.exe /run /tn sparkle-run')
     } catch (error) {
       let createErrorStr = `${createError}`
       let errorStr = `${error}`

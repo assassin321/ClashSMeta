@@ -97,7 +97,7 @@ jobs:
         with:
           pkgname: ${{ matrix.package }}
           asset_dir: aur/${{ matrix.package }}
-          commit_username: xishang
+          commit_username: assassin321
           commit_email: zhiqu@cock.li
           ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
           commit_message: Update to ${{ steps.package.outputs.pkgver }}

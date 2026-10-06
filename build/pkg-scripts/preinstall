@@ -1,10 +1,10 @@
 #!/bin/sh
 
 OLD_SYSPROXY="/Library/PrivilegedHelperTools/clashsmeta.helper"
-SERVICE_NAME="ClashSMetaService"
-SERVICE_STATE_FILE="/tmp/clashsmeta-service-was-running"
+SERVICE_NAME="SparkleService"
+SERVICE_STATE_FILE="/tmp/sparkle-service-was-running"
 APP_PATH="/Applications/ClashSMeta.app"
-SERVICE_BIN="$APP_PATH/Contents/Resources/files/clashsmeta-service"
+SERVICE_BIN="$APP_PATH/Contents/Resources/files/sparkle-service"
 
 UNINSTALL=false
 

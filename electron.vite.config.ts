@@ -5,8 +5,8 @@ import tailwindcss from '@tailwindcss/vite'
 import { systemCoreDefaultPath, systemCoreOnlyBuild, systemServicePath } from './scripts/build-env'
 
 const buildDefines = {
-  __CLASHSMETA_SYSTEM_CORE_PATH__: JSON.stringify(systemCoreDefaultPath),
-  __CLASHSMETA_SYSTEM_SERVICE_PATH__: JSON.stringify(systemServicePath)
+  __SPARKLE_SYSTEM_CORE_PATH__: JSON.stringify(systemCoreDefaultPath),
+  __SPARKLE_SYSTEM_SERVICE_PATH__: JSON.stringify(systemServicePath)
 }
 const omitExternalRendererResources = {
   name: 'omit-external-renderer-resources',

@@ -1,12 +1,12 @@
 import path from 'path'
 
-const systemCoreBuildValue = process.env.CLASHSMETA_SYSTEM_CORE?.trim() || ''
+const systemCoreBuildValue = process.env.SPARKLE_SYSTEM_CORE?.trim() || ''
 const configuredSystemCorePath =
   systemCoreBuildValue === '1' ? '/usr/bin/mihomo' : systemCoreBuildValue
-const systemServiceBuildValue = process.env.CLASHSMETA_SYSTEM_SERVICE?.trim() || ''
+const systemServiceBuildValue = process.env.SPARKLE_SYSTEM_SERVICE?.trim() || ''
 const configuredSystemServicePath =
   !systemServiceBuildValue || systemServiceBuildValue === '1'
-    ? '/usr/bin/clashsmeta-service'
+    ? '/usr/bin/sparkle-service'
     : systemServiceBuildValue
 
 if (
@@ -14,7 +14,7 @@ if (
   configuredSystemCorePath &&
   !path.isAbsolute(configuredSystemCorePath)
 ) {
-  throw new Error('CLASHSMETA_SYSTEM_CORE must be 1 or an absolute path')
+  throw new Error('SPARKLE_SYSTEM_CORE must be 1 or an absolute path')
 }
 
 if (
@@ -22,7 +22,7 @@ if (
   systemCoreBuildValue &&
   !path.isAbsolute(configuredSystemServicePath)
 ) {
-  throw new Error('CLASHSMETA_SYSTEM_SERVICE must be 1 or an absolute path')
+  throw new Error('SPARKLE_SYSTEM_SERVICE must be 1 or an absolute path')
 }
 
 export const systemCoreDefaultPath = process.platform === 'linux' ? configuredSystemCorePath : ''

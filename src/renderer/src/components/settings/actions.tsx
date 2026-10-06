@@ -230,7 +230,7 @@ const Actions: React.FC = () => {
           divider
         >
           <Button size="sm" onPress={quitWithoutCore} variant="primary" data-color="default">
-            退出
+            轻量模式
           </Button>
         </SettingItem>
         <SettingItem compatKey="legacy" title="退出应用" divider>

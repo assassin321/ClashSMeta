@@ -28,7 +28,7 @@ package() {
     asar extract $srcdir/opt/clashsmeta/resources/app.asar ${pkgdir}/opt/clashsmeta
     cp -r $srcdir/opt/clashsmeta/resources/sidecar ${pkgdir}/opt/clashsmeta/resources/
     cp -r $srcdir/opt/clashsmeta/resources/files ${pkgdir}/opt/clashsmeta/resources/
-    chmod +x ${pkgdir}/opt/clashsmeta/resources/files/clashsmeta-service
+    chmod +x ${pkgdir}/opt/clashsmeta/resources/files/sparkle-service
     chmod +sx ${pkgdir}/opt/clashsmeta/resources/sidecar/mihomo
     chmod +sx ${pkgdir}/opt/clashsmeta/resources/sidecar/mihomo-alpha
     install -Dm755 "${srcdir}/${_pkgname}.sh" "${pkgdir}/usr/bin/${_pkgname}"

@@ -114,7 +114,7 @@ function buildCanonicalRequest(
   const query = canonicalizeQuery(resolvedUrl)
 
   return [
-    'CLASHSMETA-AUTH-V2',
+    'SPARKLE-AUTH-V2',
     timestamp,
     nonce,
     keyId,
@@ -324,7 +324,7 @@ export const getServiceAuthHeaders = (
   const keyId = keyManager.getKeyID()
   const urlObj = new URL(pathWithQuery, 'http://localhost')
   const canonical = [
-    'CLASHSMETA-AUTH-V2',
+    'SPARKLE-AUTH-V2',
     timestamp,
     nonce,
     keyId,

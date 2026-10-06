@@ -93,9 +93,9 @@ export function mihomoIpcPath(): string {
 
 export function serviceIpcPath(): string {
   if (process.platform === 'win32') {
-    return '\\\\.\\pipe\\clashsmeta\\service'
+    return '\\\\.\\pipe\\sparkle\\service'
   }
-  return '/tmp/clashsmeta-service.sock'
+  return '/tmp/sparkle-service.sock'
 }
 
 export function mihomoCoreDir(): string {
@@ -129,7 +129,7 @@ function systemCorePath(): string {
 export function servicePath(): string {
   if (systemCoreOnlyBuild) return systemServicePath
   const isWin = process.platform === 'win32'
-  return path.join(resourcesFilesDir(), `clashsmeta-service${isWin ? '.exe' : ''}`)
+  return path.join(resourcesFilesDir(), `sparkle-service${isWin ? '.exe' : ''}`)
 }
 
 export function serviceAuthStorePath(): string {

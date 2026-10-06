@@ -158,7 +158,7 @@ const ServiceModal: React.FC<Props> = (props) => {
         <Modal.Container scroll="inside">
           <Modal.Dialog className="w-112.5">
             <Modal.Header className="app-drag flex-col gap-1">
-              <Modal.Heading>ClashSMeta 服务管理</Modal.Heading>
+              <Modal.Heading>Clash Meta 服务管理</Modal.Heading>
             </Modal.Header>
             <Modal.Body className="divide-y divide-default-200">
               <div className="flex h-11 items-center gap-3">

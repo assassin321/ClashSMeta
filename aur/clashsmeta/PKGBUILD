@@ -34,7 +34,7 @@ package() {
     bsdtar -xf clashsmeta-linux-${pkgver}*.deb
     bsdtar -xf data.tar.xz -C "${pkgdir}/"
     chmod +x ${pkgdir}/opt/clashsmeta/clashsmeta
-    chmod +x ${pkgdir}/opt/clashsmeta/resources/files/clashsmeta-service
+    chmod +x ${pkgdir}/opt/clashsmeta/resources/files/sparkle-service
     chmod +sx ${pkgdir}/opt/clashsmeta/resources/sidecar/mihomo
     chmod +sx ${pkgdir}/opt/clashsmeta/resources/sidecar/mihomo-alpha
     install -Dm755 "${srcdir}/../${pkgname}.sh" "${pkgdir}/usr/bin/${pkgname}"

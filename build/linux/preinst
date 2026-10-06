@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SERVICE_NAME='ClashSMetaService'
+SERVICE_NAME='SparkleService'
 STATE_DIR='/run/clashsmeta'
 STATE_FILE="$STATE_DIR/service-was-running"
 PID_FILES="/var/run/$SERVICE_NAME.pid /run/$SERVICE_NAME.pid"

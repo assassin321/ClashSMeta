@@ -27,7 +27,7 @@ sha256sums_aarch64=('2a7dada64a8ef3e76b11cfaa3b9a3acb98cc9e8d4da506100e7eb750dd1
 package() {
     bsdtar -xf data.tar.xz -C "$pkgdir"
     chmod +x "$pkgdir/opt/clashsmeta/clashsmeta"
-    chmod +x "$pkgdir/opt/clashsmeta/resources/files/clashsmeta-service"
+    chmod +x "$pkgdir/opt/clashsmeta/resources/files/sparkle-service"
     chmod +sx "$pkgdir/opt/clashsmeta/resources/sidecar/mihomo"
     chmod +sx "$pkgdir/opt/clashsmeta/resources/sidecar/mihomo-alpha"
     install -Dm755 "$srcdir/${_pkgname}.sh" "$pkgdir/usr/bin/${_pkgname}"

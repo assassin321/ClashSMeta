@@ -303,7 +303,7 @@ const resolveEnableLoopback = () =>
     file: 'enableLoopback.exe',
     downloadURL: `https://github.com/Kuingsmile/uwp-tool/releases/download/latest/enableLoopback.exe`
   })
-const resolveClashSMetaService = () => {
+const resolveSparkleService = () => {
   const map = {
     'win32-x64': 'sparkle-service-windows-amd64-v3',
     'win32-ia32': 'sparkle-service-windows-386',
@@ -318,14 +318,14 @@ const resolveClashSMetaService = () => {
   const ext = platform == 'win32' ? '.exe' : ''
 
   return resolveResource({
-    file: `clashsmeta-service${ext}`,
+    file: `sparkle-service${ext}`,
     downloadURL: `https://github.com/UruhaLushia/sparkle-service/releases/download/pre-release/${base}${ext}`,
     needExecutable: true
   })
 }
 const resolveRunner = () =>
   resolveResource({
-    file: 'clashsmeta-run.exe',
+    file: 'sparkle-run.exe',
     downloadURL: `https://github.com/xishang0128/sparkle-run/releases/download/${arch}/sparkle-run.exe`
   })
 
@@ -458,8 +458,8 @@ const tasks: Task[] = [
     winOnly: true
   },
   {
-    name: 'clashsmeta-service',
-    func: resolveClashSMetaService,
+    name: 'sparkle-service',
+    func: resolveSparkleService,
     retry: 5
   },
   {
