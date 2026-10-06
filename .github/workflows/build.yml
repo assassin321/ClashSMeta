@@ -121,9 +121,6 @@ jobs:
           case "${{ matrix.os }}-${{ matrix.arch }}" in
             windows-latest-x64) PNPM_TARGET_FLAGS="--os=current --os=win32 --cpu=current --cpu=x64"; SPARKLE_NATIVE_PACKAGE="@uruhalushia/sparkle-native-win32-x64-msvc" ;;
             windows-latest-arm64) PNPM_TARGET_FLAGS="--os=current --os=win32 --cpu=current --cpu=arm64"; SPARKLE_NATIVE_PACKAGE="@uruhalushia/sparkle-native-win32-arm64-msvc" ;;
-            ubuntu-latest-x64) PNPM_TARGET_FLAGS="--os=current --os=linux --cpu=current --cpu=x64 --libc=current --libc=glibc"; SPARKLE_NATIVE_PACKAGE="@uruhalushia/sparkle-native-linux-x64-gnu" ;;
-            ubuntu-latest-arm64) PNPM_TARGET_FLAGS="--os=current --os=linux --cpu=current --cpu=arm64 --libc=current --libc=glibc"; SPARKLE_NATIVE_PACKAGE="@uruhalushia/sparkle-native-linux-arm64-gnu" ;;
-            ubuntu-latest-loong64) PNPM_TARGET_FLAGS="--os=current --os=linux --cpu=current --cpu=loong64 --libc=current --libc=glibc"; SPARKLE_NATIVE_PACKAGE="@uruhalushia/sparkle-native-linux-loong64-gnu" ;;
             macos-latest-x64) PNPM_TARGET_FLAGS="--os=current --os=darwin --cpu=current --cpu=x64"; SPARKLE_NATIVE_PACKAGE="@uruhalushia/sparkle-native-darwin-x64" ;;
             macos-latest-arm64) PNPM_TARGET_FLAGS="--os=current --os=darwin --cpu=current --cpu=arm64"; SPARKLE_NATIVE_PACKAGE="@uruhalushia/sparkle-native-darwin-arm64" ;;
             *) echo "Unsupported native target: ${{ matrix.os }}-${{ matrix.arch }}" && exit 1 ;;
