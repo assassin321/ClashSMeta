@@ -5,6 +5,7 @@
 <p align="center">
   <a href="https://github.com/assassin321/ClashSMeta/releases/latest"><img src="https://img.shields.io/github/v/release/assassin321/ClashSMeta?label=latest"></a>
   <a href="https://github.com/assassin321/ClashSMeta/releases/tag/rolling"><img src="https://img.shields.io/badge/-rolling-orange"></a>
+  <a href="https://t.me/+y7rcYjEKIiI1NzZl"><img src="https://img.shields.io/badge/Telegram-Group-blue?logo=telegram"></a>
 </p>
 
 ## 特性
@@ -158,14 +159,14 @@ pnpm build:linux
 **Linux 系统内核构建：**
 
 ```bash
-export SPARKLE_SYSTEM_CORE=1
-# 可选：默认值为 /usr/bin/sparkle-service
-export SPARKLE_SYSTEM_SERVICE=/usr/bin/sparkle-service
+export CLASHSMETA_SYSTEM_CORE=1
+# 可选：默认值为 /usr/bin/clashsmeta-service
+export CLASHSMETA_SYSTEM_SERVICE=/usr/bin/clashsmeta-service
 pnpm install
 pnpm build:linux
 ```
 
-`SPARKLE_SYSTEM_CORE=1` 默认使用 `/usr/bin/mihomo`，也可指定绝对路径；服务默认使用 `/usr/bin/sparkle-service`。
+`CLASHSMETA_SYSTEM_CORE=1` 默认使用 `/usr/bin/mihomo`，也可指定绝对路径；服务默认使用 `/usr/bin/clashsmeta-service`。
 
 此模式不下载或打包外部资源，也不引用项目的 pre/postinstall（electron-builder 默认脚本除外）。资源由发行版拆分包提供；服务仅保留连接和初始化，生命周期交由 init 系统管理。
 

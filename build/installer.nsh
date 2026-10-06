@@ -2,7 +2,7 @@
 !include FileFunc.nsh
 !insertmacro DriveSpace
 
-!define SPARKLE_MIN_TEMP_SPACE_MB 1024
+!define CLASHSMETA_MIN_TEMP_SPACE_MB 1024
 
 !macro customHeader
   Var clashsmetaServiceWasRunning
@@ -10,8 +10,8 @@
 
 !macro EnsureTempSpace
   ${DriveSpace} "$TEMP" "/D=F /S=M" $R0
-  ${If} $R0 < ${SPARKLE_MIN_TEMP_SPACE_MB}
-    MessageBox MB_ICONSTOP "Not enough space in the temp directory. Free at least ${SPARKLE_MIN_TEMP_SPACE_MB} MB on the temp drive or set TEMP/TMP to another drive, then run the installer again."
+  ${If} $R0 < ${CLASHSMETA_MIN_TEMP_SPACE_MB}
+    MessageBox MB_ICONSTOP "Not enough space in the temp directory. Free at least ${CLASHSMETA_MIN_TEMP_SPACE_MB} MB on the temp drive or set TEMP/TMP to another drive, then run the installer again."
     Abort
   ${EndIf}
 !macroend
@@ -31,8 +31,8 @@
   ${LoopUntil} $R5 >= $R6
 !macroend
 
-!macro QuerySparkleServiceState RESULT
-  nsExec::ExecToStack '"$SYSDIR\sc.exe" query SparkleService'
+!macro QueryClashSMetaServiceState RESULT
+  nsExec::ExecToStack '"$SYSDIR\sc.exe" query ClashSMetaService'
   Pop $R2
   Pop $R3
 
@@ -57,10 +57,10 @@
   ${EndIf}
 !macroend
 
-!macro WaitSparkleServiceStopped
+!macro WaitClashSMetaServiceStopped
   StrCpy $R0 0
   ${Do}
-    !insertmacro QuerySparkleServiceState $R1
+    !insertmacro QueryClashSMetaServiceState $R1
     ${If} $R1 == "stopped"
     ${OrIf} $R1 == "not-installed"
       ${Break}
@@ -69,16 +69,16 @@
     IntOp $R0 $R0 + 1
   ${LoopUntil} $R0 >= 30
 
-  !insertmacro QuerySparkleServiceState $R1
+  !insertmacro QueryClashSMetaServiceState $R1
   ${If} $R1 != "stopped"
   ${AndIf} $R1 != "not-installed"
-    MessageBox MB_ICONSTOP "SparkleService is still running. Please stop the service and run the installer again."
+    MessageBox MB_ICONSTOP "ClashSMetaService is still running. Please stop the service and run the installer again."
     Abort
   ${EndIf}
 !macroend
 
 !macro DisableSysProxy
-  StrCpy $R1 "$INSTDIR\resources\files\sparkle-service.exe"
+  StrCpy $R1 "$INSTDIR\resources\files\clashsmeta-service.exe"
   ${If} ${FileExists} "$R1"
     DetailPrint "Disabling system proxy: $R1"
     nsExec::ExecToLog '"$R1" sysproxy disable'
@@ -89,17 +89,17 @@
   ${EndIf}
 !macroend
 
-!macro StopSparkleServiceIfRunning
-  !insertmacro QuerySparkleServiceState $R1
+!macro StopClashSMetaServiceIfRunning
+  !insertmacro QueryClashSMetaServiceState $R1
 
   ${If} $R1 != "stopped"
   ${AndIf} $R1 != "not-installed"
     StrCpy $clashsmetaServiceWasRunning "true"
     DetailPrint "Stopping ClashSMeta service"
-    nsExec::ExecToStack '"$SYSDIR\sc.exe" stop SparkleService'
+    nsExec::ExecToStack '"$SYSDIR\sc.exe" stop ClashSMetaService'
     Pop $R2
     Pop $R3
-    !insertmacro WaitSparkleServiceStopped
+    !insertmacro WaitClashSMetaServiceStopped
     !insertmacro DisableSysProxy
   ${EndIf}
 !macroend
@@ -107,7 +107,7 @@
 !macro customInit
   !insertmacro EnsureTempSpace
   StrCpy $clashsmetaServiceWasRunning "false"
-  !insertmacro StopSparkleServiceIfRunning
+  !insertmacro StopClashSMetaServiceIfRunning
 !macroend
 
 !macro customInstall
@@ -116,7 +116,7 @@
   ${endIf}
 
   ${If} $clashsmetaServiceWasRunning == "true"
-    StrCpy $R1 "$INSTDIR\resources\files\sparkle-service.exe"
+    StrCpy $R1 "$INSTDIR\resources\files\clashsmeta-service.exe"
     ${If} ${FileExists} "$R1"
       DetailPrint "Starting ClashSMeta service: $R1"
       nsExec::ExecToLog '"$R1" service start'

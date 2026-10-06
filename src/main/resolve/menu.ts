@@ -187,7 +187,7 @@ export async function createApplicationMenu(): Promise<void> {
             dialog.showMessageBox(mainWindow!, {
               type: 'info',
               title: '关于 Clash Meta',
-              message: 'Clash Meta For Windows',
+              message: 'Clash Meta',
               detail: `版本：${app.getVersion()}\n一个基于 Electron 的代理工具`,
               buttons: ['确定']
             })

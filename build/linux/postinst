@@ -23,7 +23,7 @@ if [ -d '/opt/clashsmeta/resources/files/sub-store-frontend' ]; then
 fi
 
 restore_clashsmeta_service_if_was_running() {
-    SERVICE_NAME='SparkleService'
+    SERVICE_NAME='ClashSMetaService'
     STATE_FILE='/run/clashsmeta/service-was-running'
 
     if [ ! -f "$STATE_FILE" ]; then

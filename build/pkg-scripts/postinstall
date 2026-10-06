@@ -10,8 +10,8 @@ chmod +s "$APP_PATH/Contents/Resources/sidecar/mihomo-alpha"
 /usr/bin/codesign --force --deep --sign - "$APP_PATH"
 
 restore_clashsmeta_service_if_was_running() {
-  SERVICE_BIN="$APP_PATH/Contents/Resources/files/sparkle-service"
-  SERVICE_STATE_FILE="/tmp/sparkle-service-was-running"
+  SERVICE_BIN="$APP_PATH/Contents/Resources/files/clashsmeta-service"
+  SERVICE_STATE_FILE="/tmp/clashsmeta-service-was-running"
 
   if [ ! -f "$SERVICE_STATE_FILE" ]; then
     return

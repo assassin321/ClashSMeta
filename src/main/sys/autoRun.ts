@@ -51,7 +51,7 @@ const taskXml = `<?xml version="1.0" encoding="UTF-16"?>
   </Settings>
   <Actions Context="Author">
     <Exec>
-      <Command>"${escapeXml(path.join(taskDir(), `sparkle-run.exe`))}"</Command>
+      <Command>"${escapeXml(path.join(taskDir(), `clashsmeta-run.exe`))}"</Command>
       <Arguments>"${escapeXml(exePath())}"</Arguments>
     </Exec>
   </Actions>

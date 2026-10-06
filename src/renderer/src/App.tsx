@@ -220,7 +220,7 @@ const App: React.FC = () => {
       <Suspense fallback={null}>
         {showQuitConfirm && (
           <ConfirmModal
-            title="确定要退出 Clash Meta For Windows 吗？"
+            title="确定要退出 Clash Meta 吗？"
             description={
               <div>
                 <p></p>

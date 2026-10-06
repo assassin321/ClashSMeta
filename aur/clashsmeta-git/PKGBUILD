@@ -37,10 +37,10 @@ build(){
 
 package() {
 	cd $srcdir/${_pkgname}/dist
-    bsdtar -xf ClashSMeta-linux-$(jq '.version' $srcdir/${_pkgname}/package.json | tr -d 'v"')*.deb
+    bsdtar -xf clashsmeta-linux-$(jq '.version' $srcdir/${_pkgname}/package.json | tr -d 'v"')*.deb
     bsdtar -xf data.tar.xz -C "${pkgdir}/"
     chmod +x ${pkgdir}/opt/clashsmeta/clashsmeta
-    chmod +x ${pkgdir}/opt/clashsmeta/resources/files/sparkle-service
+    chmod +x ${pkgdir}/opt/clashsmeta/resources/files/clashsmeta-service
     chmod +sx ${pkgdir}/opt/clashsmeta/resources/sidecar/mihomo
     chmod +sx ${pkgdir}/opt/clashsmeta/resources/sidecar/mihomo-alpha
     install -Dm755 "${srcdir}/../${_pkgname}.sh" "${pkgdir}/usr/bin/${_pkgname}"

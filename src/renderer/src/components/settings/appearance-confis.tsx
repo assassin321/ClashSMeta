@@ -284,7 +284,7 @@ const AppearanceConfig: React.FC = () => {
                   <Tabs.ListContainer>
                     <Tabs.List aria-label="选项">
                       <Tabs.Tab key="same-line" id="same-line">
-                        一行
+                        同一行
                         <Tabs.Indicator />
                       </Tabs.Tab>
                       <Tabs.Tab key="new-line" id="new-line">
