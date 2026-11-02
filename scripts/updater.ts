@@ -13,6 +13,7 @@ const latest = {
 }
 
 if (process.env.SKIP_CHANGELOG !== '1') {
+  changelog += '\n>**注意：** 如果软件无法正常双击打开，请右键以管理员身份运行。\n\n'
   changelog += '\n### 下载地址：\n\n#### Windows10/11：\n\n'
   changelog += `- 安装版：[64 位](${downloadUrl}/clashsmeta-windows-${version}-x64-setup.exe) | [ARM64](${downloadUrl}/clashsmeta-windows-${version}-arm64-setup.exe)\n\n`
   changelog += '\n#### macOS 11+:\n\n'
