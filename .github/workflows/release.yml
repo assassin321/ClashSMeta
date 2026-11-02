@@ -1,0 +1,316 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release, for example v1.27.0'
+        required: true
+        type: string
+      tag:
+        description: 'Target release tag, defaults to the version'
+        required: false
+        type: string
+  schedule:
+    # 12:00 in Asia/Hong_Kong; prepare filters out non-month-end dates.
+    - cron: '0 4 28-31 * *'
+  push:
+    tags:
+      - 'v[0-9]*.[0-9]*.[0-9]*'
+      - '[0-9]*.[0-9]*.[0-9]*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      should_release: ${{ steps.release.outputs.should_release }}
+      version: ${{ steps.release.outputs.version }}
+      tag: ${{ steps.release.outputs.tag }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: '0'
+          fetch-tags: 'true'
+
+      - name: Determine Release Version
+        id: release
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_TAG: ${{ inputs.tag }}
+          INPUT_VERSION: ${{ inputs.version }}
+          REF_NAME: ${{ github.ref_name }}
+        shell: bash
+        run: |
+          if [[ "$EVENT_NAME" == "schedule" ]]; then
+            CURRENT_DAY=$(TZ=Asia/Hong_Kong date +%d)
+            CURRENT_MONTH=$(TZ=Asia/Hong_Kong date +%m)
+            TOMORROW_MONTH=$(TZ=Asia/Hong_Kong date -d tomorrow +%m)
+            if [[ "$CURRENT_MONTH" == "$TOMORROW_MONTH" && "$CURRENT_DAY" != "01" ]]; then
+              echo "Not the last day of the month or a delayed month-end run in Asia/Hong_Kong"
+              echo "should_release=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
+
+          case "$EVENT_NAME" in
+            schedule)
+              PACKAGE_VERSION=$(jq -r '.version' package.json)
+              if [[ ! "$PACKAGE_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+                echo "Invalid package version: $PACKAGE_VERSION"
+                exit 1
+              fi
+
+              if git rev-parse -q --verify "refs/tags/$PACKAGE_VERSION^{commit}" >/dev/null; then
+                BASE_TAG=$PACKAGE_VERSION
+              elif git rev-parse -q --verify "refs/tags/v$PACKAGE_VERSION^{commit}" >/dev/null; then
+                BASE_TAG="v$PACKAGE_VERSION"
+              else
+                echo "Cannot find stable tag for package version $PACKAGE_VERSION"
+                exit 1
+              fi
+
+              CHANGES=$(git log "$BASE_TAG..HEAD" --pretty=format:%s | grep -Ev '^update version to [0-9]+\.[0-9]+\.[0-9]+$' || true)
+              if [[ -z "$CHANGES" ]]; then
+                echo "No new commits since stable tag $BASE_TAG"
+                echo "should_release=false" >> "$GITHUB_OUTPUT"
+                exit 0
+              fi
+
+              IFS=. read -r MAJOR MINOR PATCH <<< "$PACKAGE_VERSION"
+              RAW_VERSION="${MAJOR}.${MINOR}.$((PATCH + 1))"
+              ;;
+            workflow_dispatch)
+              RAW_VERSION="$INPUT_VERSION"
+              ;;
+            push)
+              RAW_VERSION="$REF_NAME"
+              ;;
+            *)
+              echo "Unsupported release event: $EVENT_NAME"
+              exit 1
+              ;;
+          esac
+
+          VERSION=${RAW_VERSION#v}
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Invalid release version: $RAW_VERSION"
+            exit 1
+          fi
+
+          TARGET_TAG=$VERSION
+          if [[ "$EVENT_NAME" == "workflow_dispatch" && -n "$INPUT_TAG" ]]; then
+            TARGET_TAG=$INPUT_TAG
+          fi
+          git check-ref-format "refs/tags/$TARGET_TAG"
+
+          echo "should_release=true" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$TARGET_TAG" >> "$GITHUB_OUTPUT"
+
+  build:
+    if: needs.prepare.outputs.should_release == 'true'
+    needs: [prepare]
+    uses: ./.github/workflows/build.yml
+    with:
+      channel: stable
+      version: ${{ needs.prepare.outputs.version }}
+      release_tag: ${{ needs.prepare.outputs.tag }}
+
+  update-version:
+    if: needs.prepare.outputs.should_release == 'true'
+    needs: [prepare, build]
+    runs-on: ubuntu-latest
+    outputs:
+      commit_sha: ${{ steps.update.outputs.commit_sha }}
+    steps:
+      - name: Checkout Default Branch
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+
+      - name: Update Version
+        id: update
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          RELEASE_VERSION: ${{ needs.prepare.outputs.version }}
+        shell: bash
+        run: |
+          jq --arg version "$RELEASE_VERSION" '.version = $version' package.json > tmp.json && mv tmp.json package.json
+          if git diff --quiet -- package.json; then
+            echo "commit_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add package.json
+          git commit -m "update version to $RELEASE_VERSION"
+          git push origin "HEAD:$DEFAULT_BRANCH"
+          echo "commit_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+  publish:
+    if: needs.prepare.outputs.should_release == 'true'
+    needs: [prepare, build, update-version]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: '0'
+          fetch-tags: 'true'
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 25
+
+      - name: Generate Changelog
+        env:
+          RELEASE_VERSION: ${{ needs.prepare.outputs.version }}
+        shell: bash
+        run: |
+          PREVIOUS_TAG=$(
+            git tag --merged HEAD |
+              awk -v current="$RELEASE_VERSION" '
+                {
+                  normalized = $0
+                  sub(/^v/, "", normalized)
+                  if (normalized ~ /^[0-9]+\.[0-9]+\.[0-9]+$/ && normalized != current) {
+                    print normalized "\t" $0
+                  }
+                }
+              ' |
+              sort -t $'\t' -k1,1V |
+              tail -n 1 |
+              cut -f 2-
+          )
+
+          if [[ -n "$PREVIOUS_TAG" ]]; then
+            TEXT=$(git log "$PREVIOUS_TAG..HEAD" --pretty=format:%s | grep -Ev '^update version to [0-9]+\.[0-9]+\.[0-9]+$' || true)
+          else
+            TEXT=$(git log HEAD --pretty=format:%s | grep -Ev '^update version to [0-9]+\.[0-9]+\.[0-9]+$' || true)
+          fi
+          if [[ -z "$TEXT" ]]; then
+            TEXT=$(git log -1 --pretty=format:%s)
+          fi
+
+          {
+            printf '请为 ClashSMeta %s 生成本次发布的中文更新日志。\n\n' "$RELEASE_VERSION"
+            printf '以下是从上一个版本以来的 Git 提交标题：\n'
+            printf '%s\n' "$TEXT"
+          } > changelog-prompt.txt
+          cat > changelog-system-prompt.txt <<'EOF'
+          你是资深开源项目发布说明编辑。请把用户提供的 Git 提交标题整理成面向最终用户的中文更新日志。
+
+          严格遵守以下要求：
+          1. 只使用提交中明确的信息，不猜测未提及的功能、行为或影响。
+          2. 忽略纯版本更新、合并提交以及没有用户价值的 CI、格式化和内部维护记录。
+          3. 合并同一变更的重复提交，按重要性排序，优先列出新功能、重要改进和问题修复。
+          4. 每条说明简洁、自然、易懂，保留必要的技术名词、平台名称和版本号。
+          5. 只输出 Markdown 无序列表，每行以 "- " 开头；不要输出标题、前言、结语、代码块或其他说明。
+          6. 即使只有一条记录，也必须遵守上述格式。
+          EOF
+          printf '%s\n' "$TEXT" > changelog-fallback.txt
+
+      - name: Install GitHub Copilot CLI
+        continue-on-error: true
+        run: npm install -g @github/copilot
+
+      - name: Generate Changelog with GitHub Copilot
+        id: copilot-changelog
+        continue-on-error: true
+        uses: actions/ai-inference@v1
+        with:
+          prompt-file: changelog-prompt.txt
+          system-prompt-file: changelog-system-prompt.txt
+          model: gemini-3.8-flash
+          token: ${{ github.token }}
+        env:
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN || github.token }}
+
+      - name: Write Changelog
+        env:
+          RESPONSE_FILE: ${{ steps.copilot-changelog.outputs.response-file }}
+          API_URL: ${{ secrets.API_URL }}
+          API_KEY: ${{ secrets.API_KEY }}
+        shell: bash
+        run: |
+          if [[ -n "$RESPONSE_FILE" && -s "$RESPONSE_FILE" ]]; then
+            CHANGELOG_TEXT=$(cat "$RESPONSE_FILE")
+          else
+            FALLBACK_RESPONSE=''
+            if [[ -n "$API_URL" && -n "$API_KEY" ]]; then
+              FALLBACK_PAYLOAD=$(jq -n \
+                --arg system_prompt "$(cat changelog-system-prompt.txt)" \
+                --arg user_prompt "$(cat changelog-prompt.txt)" \
+                '{stream: false, model: "gpt-6-luna", messages: [
+                  {role: "system", content: $system_prompt},
+                  {role: "user", content: $user_prompt}
+                ]}')
+              FALLBACK_RESPONSE=$(curl -sS -X POST "$API_URL/v1/chat/completions" \
+                -H "Authorization: Bearer $API_KEY" \
+                -H "Content-Type: application/json" \
+                -d "$FALLBACK_PAYLOAD" \
+                --max-time 30 || true)
+              CHANGELOG_TEXT=$(printf '%s' "$FALLBACK_RESPONSE" |
+                jq -r '.choices[0].message.content // empty' 2>/dev/null || true)
+            fi
+            if [[ -z "$CHANGELOG_TEXT" ]]; then
+              CHANGELOG_TEXT=$(cat changelog-fallback.txt)
+            fi
+          fi
+
+          echo '# 更新日志' > changelog.md
+          printf '\n' >> changelog.md
+          printf '%s\n' "$CHANGELOG_TEXT" |
+            sed -E '/^[[:space:]]*```/d; /^[[:space:]]*#/d; s/^[[:space:]]*([-*]|[0-9]+\.)[[:space:]]*/- /' |
+            awk 'NF { if ($0 !~ /^- /) $0 = "- " $0; print }' >> changelog.md
+
+      - name: Set Release Version
+        env:
+          RELEASE_VERSION: ${{ needs.prepare.outputs.version }}
+        shell: bash
+        run: |
+          jq --arg version "$RELEASE_VERSION" '.version = $version' package.json > tmp.json && mv tmp.json package.json
+
+      - name: Install Dependencies and Generate Metadata
+        env:
+          RELEASE_TAG: ${{ needs.prepare.outputs.tag }}
+        shell: bash
+        run: |
+          npm install -g pnpm
+          SKIP_PREPARE=1 pnpm install
+          pnpm updater
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v7
+        with:
+          path: bin/
+          merge-multiple: true
+
+      - name: Delete Current Release Assets
+        uses: 8Mi-Tech/delete-release-assets-action@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ needs.prepare.outputs.tag }}
+          deleteOnlyFromDrafts: false
+
+      - name: Publish Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.prepare.outputs.tag }}
+          name: ${{ needs.prepare.outputs.version }}
+          target_commitish: ${{ needs.update-version.outputs.commit_sha }}
+          body_path: changelog.md
+          files: |
+            latest.yml
+            bin/dist/*
+          make_latest: true
