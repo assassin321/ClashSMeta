@@ -213,8 +213,7 @@ export const buildContextMenu = async (): Promise<Menu> => {
     envType = process.platform === 'win32' ? ['powershell'] : ['bash'],
     autoCloseConnection,
     proxyInTray = true,
-    showCurrentProxyInTray = false,
-    trayProxyGroupStyle = 'submenu',
+    trayProxyDelayLayout = 'new-line',
     // useCustomTrayMenu = false,
     triggerSysProxyShortcut = '',
     showFloatingWindowShortcut = '',
@@ -230,50 +229,47 @@ export const buildContextMenu = async (): Promise<Menu> => {
   if (proxyInTray && process.platform !== 'linux') {
     try {
       const groups = await mihomoGroups()
-      const groupItems: Electron.MenuItemConstructorOptions[] = groups.map((group) => {
-        const groupLabel = showCurrentProxyInTray ? `${group.name} | ${group.now}` : group.name
+      const innerGroups = groups.map((group) => {
+        const currentProxy = group.all.find((proxy) => proxy.name === group.now)
+        const delay = currentProxy?.history.length
+          ? currentProxy.history[currentProxy.history.length - 1].delay
+          : -1
+        const displayDelay = formatDelayText(delay)
 
+        const isNewLine = trayProxyDelayLayout === 'new-line'
         return {
           id: group.name,
-          label: groupLabel,
+          label: isNewLine ? group.name : `${group.name}   ${displayDelay}`,
+          sublabel: isNewLine ? displayDelay : '',
           type: 'submenu' as const,
           submenu: [
             {
-              id: `${group.name}-delay-test`,
-              label: t('延迟测试'),
+              id: `${group.name}-test`,
+              label: '重新测试',
               type: 'normal' as const,
               click: async (): Promise<void> => {
-                try {
-                  await mihomoGroupDelay(group.name, group.testUrl)
-                  mainWindow?.webContents.send('groupsUpdated')
-                } catch (error) {
-                  await trayLogger.error(`Failed to test proxy group delay: ${group.name}`, error)
-                }
+                await mihomoGroupDelay(group.name, group.testUrl)
+                ipcMain.emit('updateTrayMenu')
               }
             },
-            { type: 'separator' as const },
+            { type: 'separator' },
             ...group.all.map((proxy) => {
-              const delay = proxy.history.length
+              const proxyDelay = proxy.history.length
                 ? proxy.history[proxy.history.length - 1].delay
                 : -1
-              let displayDelay = `(${delay}ms)`
-              if (delay === -1) {
-                displayDelay = ''
-              }
-              if (delay === 0) {
-                displayDelay = '(Timeout)'
-              }
+              const proxyDisplayDelay = formatDelayText(proxyDelay)
+
+              const isNewLine = trayProxyDelayLayout === 'new-line'
               return {
                 id: proxy.name,
-                label: `${proxy.name}   ${displayDelay}`,
+                label: isNewLine ? proxy.name : `${proxy.name}   ${proxyDisplayDelay}`,
+                sublabel: isNewLine ? proxyDisplayDelay : '',
                 type: 'radio' as const,
                 checked: proxy.name === group.now,
                 click: async (): Promise<void> => {
                   await mihomoChangeProxy(group.name, proxy.name)
                   if (autoCloseConnection) {
-                    await mihomoCloseAllConnections(
-                      autoCloseConnectionOnlyGroup ? group.name : undefined
-                    )
+                    await mihomoCloseConnections()
                   }
                 }
               }
@@ -281,22 +277,14 @@ export const buildContextMenu = async (): Promise<Menu> => {
           ]
         }
       })
-
-      if (trayProxyGroupStyle === 'submenu') {
-        groupsMenu = [
-          { type: 'separator' },
-          {
-            id: 'proxy-groups',
-            label: t('代理分组'),
-            type: 'submenu',
-            submenu: groupItems
-          }
-        ]
-      } else {
-        groupsMenu = groupItems
-        groupsMenu.unshift({ type: 'separator' })
+      groupsMenu = [
+      {
+        label: '代理节点',
+        type: 'submenu',
+        submenu: innerGroups
       }
-    } catch {
+    ]
+    } catch (e) {
       // ignore
       // 避免出错时无法创建托盘菜单
     }

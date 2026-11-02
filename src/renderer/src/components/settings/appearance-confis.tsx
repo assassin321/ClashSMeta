@@ -48,8 +48,7 @@ const AppearanceConfig: React.FC = () => {
     useDockIcon = true,
     showTraffic = false,
     proxyInTray = true,
-    showCurrentProxyInTray = false,
-    trayProxyGroupStyle = 'submenu',
+    trayProxyDelayLayout = 'auto',
     customTrayIcon = '',
     disableTray = false,
     showFloatingWindow: showFloating = false,
@@ -269,30 +268,33 @@ const AppearanceConfig: React.FC = () => {
               </Switch>
             </SettingItem>
             {proxyInTray && (
-              <>
-                <SettingItem title={t('托盘菜单显示当前代理')} divider>
-                  <Switch
-                    size="sm"
-                    isSelected={showCurrentProxyInTray}
-                    onValueChange={async (v) => {
-                      await patchAppConfig({ showCurrentProxyInTray: v })
-                    }}
-                  />
-                </SettingItem>
-                <SettingItem title={t('托盘代理组样式')} divider>
-                  <Tabs
-                    size="sm"
-                    color="primary"
-                    selectedKey={trayProxyGroupStyle}
-                    onSelectionChange={(key) => {
-                      patchAppConfig({ trayProxyGroupStyle: key as 'default' | 'submenu' })
-                    }}
-                  >
-                    <Tab key="default" title={t('默认')} />
-                    <Tab key="submenu" title={t('子菜单')} />
-                  </Tabs>
-                </SettingItem>
-              </>
+              <SettingItem compatKey="legacy" title="托盘菜单节点延迟显示方式" divider>
+                <Tabs
+                  selectedKey={trayProxyDelayLayout}
+                  onSelectionChange={async (v) => {
+                    await patchAppConfig({
+                      trayProxyDelayLayout: v as 'same-line' | 'new-line'
+                    })
+                    window.electron.ipcRenderer.send('updateTrayMenu')
+                  }}
+                  data-color="primary"
+                  data-size="sm"
+                  data-full-width={false}
+                >
+                  <Tabs.ListContainer>
+                    <Tabs.List aria-label="选项">
+                      <Tabs.Tab key="same-line" id="same-line">
+                        同一行
+                        <Tabs.Indicator />
+                      </Tabs.Tab>
+                      <Tabs.Tab key="new-line" id="new-line">
+                        换行
+                        <Tabs.Indicator />
+                      </Tabs.Tab>
+                    </Tabs.List>
+                  </Tabs.ListContainer>
+                </Tabs>
+              </SettingItem>
             )}
             <SettingItem
               compatKey="legacy"

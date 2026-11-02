@@ -261,8 +261,8 @@ export async function createWindow(appConfig?: AppConfig): Promise<void> {
     mainWindow = new BrowserWindow({
       minWidth: 800,
       minHeight: 600,
-      width: 1040,
-      height: 880,
+      width: 845,
+      height: 710,
       x: windowState.x,
       y: windowState.y,
       show: false,

@@ -104,8 +104,7 @@ interface AppConfig {
   useWindowFrame: boolean
   enableWindowDrag: boolean
   proxyInTray: boolean
-  showCurrentProxyInTray: boolean
-  trayProxyGroupStyle?: 'default' | 'submenu'
+  trayProxyDelayLayout?: 'same-line' | 'new-line'
   siderOrder: string[]
   siderWidth: number
   appTheme: AppTheme
