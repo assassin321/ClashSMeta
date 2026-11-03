@@ -50,8 +50,7 @@ export const defaultConfig: AppConfig = {
     'resource',
     'dns',
     'sniff',
-    'substore', 
-    'gateway'
+    'substore'
   ],
   siderWidth: 250,
   sysProxy: { enable: false, mode: 'manual', guard: false, guardNotify: false },
