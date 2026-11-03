@@ -56,8 +56,7 @@ const defaultSiderOrder = [
   'resource',
   'dns',
   'sniff',
-  'substore', 
-  'gateway'
+  'substore'
 ]
 
 const siderCardRouteMap = {
