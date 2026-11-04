@@ -21,7 +21,7 @@ const TunSwitcher: React.FC<Props> = (props) => {
   const location = useLocation()
   const match = location.pathname.includes('/tun') || false
   const { appConfig } = useAppConfig()
-  const { tunCardStatus = 'col-span-1', disableAnimation = false } = appConfig || {}
+  const { tunCardStatus = 'col-span-1', disableAnimation = true } = appConfig || {}
   const { controledMihomoConfig, patchControledMihomoConfig } = useControledMihomoConfig()
   const { tun } = controledMihomoConfig || {}
   const { enable } = tun || {}

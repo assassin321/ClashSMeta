@@ -34,7 +34,7 @@ const App: React.FC = () => {
     autoCheckUpdate,
     updateChannel = 'stable',
     showUpdateButtonAfterNotification = true,
-    disableAnimation = false
+    disableAnimation = true
   } = appConfig || {}
   const narrowWidth = platform === 'darwin' ? 70 : 60
   const [siderWidthValue, setSiderWidthValue] = useState(siderWidth)
@@ -253,7 +253,7 @@ const App: React.FC = () => {
       <Suspense fallback={null}>
         {showQuitConfirm && (
           <ConfirmModal
-            title="确定要退出 ClashSMeta 吗？"
+            title="确定要退出 Clash Meta 吗？"
             description={
               <div>
                 <p></p>

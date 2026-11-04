@@ -141,7 +141,7 @@ export const BaseEditor: React.FC<Props> = (props) => {
     language,
     onChange
   } = props
-  const { appConfig: { disableAnimation = false } = {} } = useAppConfig()
+  const { appConfig: { disableAnimation = true } = {} } = useAppConfig()
 
   const { hasLongLine, isLargeContent } = useMemo(
     () => getContentStats(value, originalValue),

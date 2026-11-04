@@ -1,5 +1,6 @@
 /* HeroUI 3 tokens with the existing ClashSMeta palette and geometry. */
 @layer base {
+
   :root,
   .light,
   [data-theme='light'] {
@@ -43,6 +44,7 @@
       0px 0px 30px 0px rgb(0 0 0 / 0.04), 0px 30px 60px 0px rgb(0 0 0 / 0.12),
       0px 0px 1px 0px rgb(0 0 0 / 0.3);
   }
+
   .dark,
   [data-theme='dark'] {
     color-scheme: dark;
@@ -85,6 +87,7 @@
       0px 0px 30px 0px rgb(0 0 0 / 0.07), 0px 30px 60px 0px rgb(0 0 0 / 0.26),
       inset 0px 0px 1px 0px rgb(255 255 255 / 0.15);
   }
+
   :root,
   .light,
   .dark,

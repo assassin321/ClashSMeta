@@ -16,7 +16,7 @@ interface Props {
 const LogCard: React.FC<Props> = (props) => {
   const { appConfig } = useAppConfig()
   const { iconOnly, expanded } = props
-  const { logCardStatus = 'col-span-1', disableAnimation = false } = appConfig || {}
+  const { logCardStatus = 'col-span-1', disableAnimation = true } = appConfig || {}
   const location = useLocation()
   const match = location.pathname.includes('/logs')
   const {

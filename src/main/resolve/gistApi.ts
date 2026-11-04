@@ -9,7 +9,7 @@ interface GistInfo {
   html_url: string
 }
 
-const GIST_DESCRIPTION = 'Auto Synced ClashSMeta Runtime Config'
+const GIST_DESCRIPTION = 'Auto Synced Clash Meta Runtime Config'
 const GIST_FILE_NAME = 'clashsmeta.yaml'
 const GIST_ENCRYPTED_FILE_NAME = 'clashsmeta.yaml.age'
 

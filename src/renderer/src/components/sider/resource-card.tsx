@@ -16,7 +16,7 @@ interface Props {
 const ResourceCard: React.FC<Props> = (props) => {
   const { appConfig } = useAppConfig()
   const { iconOnly, expanded } = props
-  const { resourceCardStatus = 'col-span-1', disableAnimation = false } = appConfig || {}
+  const { resourceCardStatus = 'col-span-1', disableAnimation = true } = appConfig || {}
   const location = useLocation()
   const match = location.pathname.includes('/resources')
   const {

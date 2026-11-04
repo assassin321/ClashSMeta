@@ -459,7 +459,7 @@ export function registerIpcMainHandlers(): void {
   handle('applyTheme', (_e, theme) => ipcErrorWrapper(applyTheme)(theme))
   handle('copyEnv', (_e, type) => ipcErrorWrapper(copyEnv)(type))
   handle('alert', (_e, msg) => {
-    void showNotification({ title: 'ClashSMeta', body: msg, variant: 'danger' })
+    void showNotification({ title: 'Clash Meta', body: msg, variant: 'danger' })
   })
   handle('resetAppConfig', resetAppConfig)
   handle('relaunchApp', () => {

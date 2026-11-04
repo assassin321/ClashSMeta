@@ -16,7 +16,7 @@ interface Props {
 const OverrideCard: React.FC<Props> = (props) => {
   const { appConfig } = useAppConfig()
   const { iconOnly, expanded } = props
-  const { overrideCardStatus = 'col-span-1', disableAnimation = false } = appConfig || {}
+  const { overrideCardStatus = 'col-span-1', disableAnimation = true } = appConfig || {}
   const location = useLocation()
   const match = location.pathname.includes('/override')
   const {

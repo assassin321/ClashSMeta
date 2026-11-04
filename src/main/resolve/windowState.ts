@@ -249,7 +249,7 @@ export function createMainWindowStateManager(): WindowStateManager {
   return createWindowStateManager({
     file: 'window-state.json',
     defaultWidth: 845,
-    defaultHeight: 710,
+    defaultHeight: 705,
     waitForSavedDisplay: process.platform === 'win32'
   })
 }

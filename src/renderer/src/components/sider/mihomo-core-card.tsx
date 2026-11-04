@@ -22,7 +22,7 @@ interface Props {
 const MihomoCoreCard: React.FC<Props> = (props) => {
   const { appConfig } = useAppConfig()
   const { iconOnly, expanded } = props
-  const { mihomoCoreCardStatus = 'col-span-2', disableAnimation = false } = appConfig || {}
+  const { mihomoCoreCardStatus = 'col-span-2', disableAnimation = true } = appConfig || {}
   const { data: version, mutate } = useSWR('mihomoVersion', mihomoVersion, {
     errorRetryInterval: 200,
     errorRetryCount: 10

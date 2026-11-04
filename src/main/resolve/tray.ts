@@ -229,7 +229,7 @@ export const buildContextMenu = async (): Promise<Menu> => {
   if (proxyInTray && process.platform !== 'linux') {
     try {
       const groups = await mihomoGroups()
-      const innerGroups = groups.map((group) => {
+      const innerProxyGroups = groups.map((group) => {
         const currentProxy = group.all.find((proxy) => proxy.name === group.now)
         const delay = currentProxy?.history.length
           ? currentProxy.history[currentProxy.history.length - 1].delay
@@ -281,7 +281,7 @@ export const buildContextMenu = async (): Promise<Menu> => {
       {
         label: '代理节点',
         type: 'submenu',
-        submenu: innerGroups
+        submenu: innerProxyGroups
       }
     ]
     } catch (e) {

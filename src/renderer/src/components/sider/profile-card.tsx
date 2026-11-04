@@ -30,7 +30,7 @@ const ProfileCard: React.FC<Props> = (props) => {
   const {
     profileCardStatus = 'col-span-2',
     profileDisplayDate = 'expire',
-    disableAnimation = false
+    disableAnimation = true
   } = appConfig || {}
   const location = useLocation()
   const match = location.pathname.includes('/profiles')

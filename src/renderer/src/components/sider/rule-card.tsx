@@ -17,7 +17,7 @@ interface Props {
 const RuleCard: React.FC<Props> = (props) => {
   const { appConfig } = useAppConfig()
   const { iconOnly, expanded } = props
-  const { ruleCardStatus = 'col-span-1', disableAnimation = false } = appConfig || {}
+  const { ruleCardStatus = 'col-span-1', disableAnimation = true } = appConfig || {}
   const location = useLocation()
   const match = location.pathname.includes('/rules')
   const { rules } = useRules()

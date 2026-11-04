@@ -26,7 +26,7 @@ const SysproxySwitcher: React.FC<Props> = (props) => {
     sysProxy,
     sysproxyCardStatus = 'col-span-1',
     onlyActiveDevice = false,
-    disableAnimation = false
+    disableAnimation = true
   } = appConfig || {}
   const { enable, mode } = sysProxy || {}
   const { controledMihomoConfig } = useControledMihomoConfig()

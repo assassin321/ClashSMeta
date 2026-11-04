@@ -262,7 +262,7 @@ export async function createWindow(appConfig?: AppConfig): Promise<void> {
       minWidth: 800,
       minHeight: 600,
       width: 845,
-      height: 710,
+      height: 705,
       x: windowState.x,
       y: windowState.y,
       show: false,

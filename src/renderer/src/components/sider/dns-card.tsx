@@ -21,7 +21,7 @@ const DNSCard: React.FC<Props> = (props) => {
   const {
     dnsCardStatus = 'col-span-1',
     controlDns = true,
-    disableAnimation = false
+    disableAnimation = true
   } = appConfig || {}
   const location = useLocation()
   const match = location.pathname.includes('/dns')

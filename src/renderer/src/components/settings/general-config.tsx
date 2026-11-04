@@ -19,7 +19,7 @@ const GeneralConfig: React.FC = () => {
     updateChannel = 'stable',
     notificationMode = 'system',
     disableGPU = false,
-    disableAnimation = false
+    disableAnimation = true
   } = appConfig || {}
 
   const [showRestartConfirm, setShowRestartConfirm] = useState(false)

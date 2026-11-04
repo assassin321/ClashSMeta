@@ -41,7 +41,7 @@ const ConnCard: React.FC<Props> = (props) => {
     showTraffic = false,
     customTrayIcon = '',
     connectionCardStatus = 'col-span-2',
-    disableAnimation = false
+    disableAnimation = true
   } = appConfig || {}
   const showTrafficRef = useRef(showTraffic)
   showTrafficRef.current = showTraffic

@@ -17,7 +17,7 @@ interface Props {
 const ProxyCard: React.FC<Props> = (props) => {
   const { appConfig } = useAppConfig()
   const { iconOnly, expanded } = props
-  const { proxyCardStatus = 'col-span-2', disableAnimation = false } = appConfig || {}
+  const { proxyCardStatus = 'col-span-2', disableAnimation = true } = appConfig || {}
   const location = useLocation()
   const match = location.pathname.includes('/proxies')
   const { groups = [] } = useGroups()

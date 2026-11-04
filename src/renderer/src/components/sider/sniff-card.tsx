@@ -21,7 +21,7 @@ const SniffCard: React.FC<Props> = (props) => {
   const {
     sniffCardStatus = 'col-span-1',
     controlSniff = true,
-    disableAnimation = false
+    disableAnimation = true
   } = appConfig || {}
   const location = useLocation()
   const match = location.pathname.includes('/sniffer')
