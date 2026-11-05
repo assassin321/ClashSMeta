@@ -66,12 +66,12 @@ const Settings: React.FC = () => {
       </div>
       <Actions />
       <AppearanceConfig />
-      <SubStoreConfig />
       <SiderConfig />
-      <WebdavConfig />
-      <WebhookConfigPanel />
       <AdvancedSettings />
       <ShortcutConfig />
+      <SubStoreConfig />
+      <WebdavConfig />
+      <WebhookConfigPanel />
       <GeneralConfig />
     </BasePage>
   )

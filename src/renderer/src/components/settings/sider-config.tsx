@@ -8,16 +8,16 @@ const titleMap = {
   sysproxyCardStatus: '系统代理',
   tunCardStatus: '虚拟网卡',
   gatewayCardStatus: '网关模式',
-  profileCardStatus: '订阅管理',
   proxyCardStatus: '代理组',
-  ruleCardStatus: '规则',
-  resourceCardStatus: '外部资源',
+  profileCardStatus: '订阅管理',
   overrideCardStatus: '覆写',
+  logCardStatus: '日志',
   connectionCardStatus: '连接',
   mihomoCoreCardStatus: '内核',
+  ruleCardStatus: '规则',
+  resourceCardStatus: '外部资源',
   dnsCardStatus: 'DNS',
   sniffCardStatus: '域名嗅探',
-  logCardStatus: '日志',
   substoreCardStatus: 'Sub-Store'
 }
 const SiderConfig: React.FC = () => {
@@ -26,33 +26,33 @@ const SiderConfig: React.FC = () => {
     sysproxyCardStatus = 'col-span-1',
     tunCardStatus = 'col-span-1',
     gatewayCardStatus = 'col-span-1',
-    profileCardStatus = 'col-span-2',
     proxyCardStatus = 'col-span-2',
-    ruleCardStatus = 'col-span-1',
-    resourceCardStatus = 'col-span-1',
+    profileCardStatus = 'col-span-2',
     overrideCardStatus = 'col-span-1',
+    logCardStatus = 'col-span-1',
     connectionCardStatus = 'col-span-2',
     mihomoCoreCardStatus = 'col-span-2',
+    ruleCardStatus = 'col-span-1',
+    resourceCardStatus = 'col-span-1',
     dnsCardStatus = 'col-span-1',
     sniffCardStatus = 'col-span-1',
-    logCardStatus = 'col-span-1',
-    substoreCardStatus = 'col-span-1'
+    substoreCardStatus = 'col-span-2'
   } = appConfig || {}
 
   const cardStatus = {
     sysproxyCardStatus,
     tunCardStatus,
     ...(supportsGateway ? { gatewayCardStatus } : {}),
-    profileCardStatus,
     proxyCardStatus,
-    ruleCardStatus,
-    resourceCardStatus,
+    profileCardStatus,
     overrideCardStatus,
+    logCardStatus,
     connectionCardStatus,
     mihomoCoreCardStatus,
+    ruleCardStatus,
+    resourceCardStatus,
     dnsCardStatus,
     sniffCardStatus,
-    logCardStatus,
     substoreCardStatus
   }
 

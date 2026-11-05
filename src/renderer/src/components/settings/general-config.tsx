@@ -18,7 +18,7 @@ const GeneralConfig: React.FC = () => {
     autoCheckUpdate,
     updateChannel = 'stable',
     notificationMode = 'system',
-    disableGPU = false,
+    disableGPU = true,
     disableAnimation = true
   } = appConfig || {}
 

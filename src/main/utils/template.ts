@@ -59,7 +59,7 @@ export const defaultConfig: AppConfig = {
   disableSystemCA: false,
   disableNftables: false,
   safePaths: [],
-  disableGPU: process.platform === 'win32' && parseInt(os.release().split('.')[2], 10) <= 20000,
+  disableGPU: true,
   proxyDisplayLayout: 'double',
   groupDisplayLayout: 'double',
   showGroupSelectedProxy: false,
