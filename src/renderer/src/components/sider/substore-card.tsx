@@ -17,7 +17,7 @@ const SubStoreCard: React.FC<Props> = (props) => {
   const { appConfig } = useAppConfig()
   const { iconOnly, expanded } = props
   const {
-    substoreCardStatus = 'col-span-1',
+    substoreCardStatus = 'col-span-2',
     useSubStore = true,
     disableAnimation = true
   } = appConfig || {}
