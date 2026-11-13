@@ -48,7 +48,7 @@ ClashSMeta 基于 Electron + React + TypeScript 构建
 
 ```bash
 git clone https://github.com/assassin321/ClashSMeta.git
-cd clashsmeta
+cd ClashSMeta
 ```
 
 2. **安装依赖**
@@ -79,7 +79,7 @@ windows 开发时可能会出现页面白屏，关闭 tun（虚拟网卡）即�
 ### 项目结构
 
 ```
-clashsmeta/
+ClashSMeta/
 ├── src/
 │   ├── main/               # Electron 主进程
 │   │   ├── core/           # 内核管理
